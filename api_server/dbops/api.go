@@ -3,8 +3,8 @@ package dbops
 import (
 	"database/sql"
 	"github.com/just-lym/video_server/api_server/defs"
+	"github.com/just-lym/video_server/api_server/log"
 	"github.com/just-lym/video_server/api_server/utils"
-	"log"
 	"time"
 )
 
@@ -24,7 +24,7 @@ func AddCredential(loginName string, pwd string) error {
 func GetUserCredential(loginName string) (string, error) {
 	stmtOut, err := dbConn.Prepare("select pwd from users where login_name=?")
 	if err != nil {
-		log.Printf("%s", err)
+		log.Errorln("%s", err)
 		return "", err
 	}
 	var pwd string
@@ -39,7 +39,7 @@ func GetUserCredential(loginName string) (string, error) {
 func DeleteUser(loginName string, pwd string) error {
 	stmtDel, err := dbConn.Prepare("delete from users where login_name = ? and pwd = ?")
 	if err != nil {
-		log.Printf("DeleteUser error: %s", err)
+		log.Errorln("DeleteUser error: %s", err)
 		return err
 	}
 	_, err = stmtDel.Exec(loginName, pwd)
