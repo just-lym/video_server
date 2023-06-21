@@ -6,7 +6,8 @@ type UserCredential struct {
 }
 
 type SignedUp struct {
-	Success bool `json:"success"`
+	Success   bool   `json:"success"`
+	SessionId string `json:"session_id"`
 }
 
 type VideoInfo struct {

@@ -1,6 +1,10 @@
 package dbops
 
-import "testing"
+import (
+	"context"
+	"net/http"
+	"testing"
+)
 
 func clearTables() {
 	dbConn.Exec("truncate users")
@@ -20,7 +24,7 @@ func TestUserWorkFlow(t *testing.T) {
 	t.Run("add", TestAddUser)
 	t.Run("get", TestGetUser)
 	t.Run("del", TestDeleteUser)
-	t.Run("reGet", testReGetUser)
+	t.Run("reGet", TestReGetUser)
 }
 
 func TestAddUser(t *testing.T) {
@@ -45,12 +49,32 @@ func TestDeleteUser(t *testing.T) {
 	}
 }
 
-func testReGetUser(t *testing.T) {
+func TestReGetUser(t *testing.T) {
 	credential, err := GetUserCredential("avensso")
 	if err != nil {
 		t.Errorf("Error of ReGetUser:%v", err)
 	}
 	if credential != "" {
 		t.Errorf("Deleting user test failed")
+	}
+}
+
+func TestContext(t *testing.T) {
+
+}
+
+func httpDo(ctx context.Context, req *http.Request, f func(*http.Response, error) error) error {
+	// Run the HTTP request in a goroutine and pass the response to f.
+	tr := &http.Transport{}
+	client := &http.Client{Transport: tr}
+	c := make(chan error, 1)
+	go func() { c <- f(client.Do(req)) }()
+	select {
+	case <-ctx.Done():
+		tr.CancelRequest(req)
+		<-c // Wait for f to return.
+		return ctx.Err()
+	case err := <-c:
+		return err
 	}
 }
