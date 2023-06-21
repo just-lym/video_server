@@ -11,6 +11,7 @@ import (
 func AddCredential(loginName string, pwd string) error {
 	stmtIns, err := dbConn.Prepare("insert into users (login_name, pwd) values (?, ?)")
 	if err != nil {
+		log.Errorln("ops db error %s", err.Error())
 		return err
 	}
 	_, err = stmtIns.Exec(loginName, pwd)

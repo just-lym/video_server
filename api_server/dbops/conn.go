@@ -1,6 +1,9 @@
 package dbops
 
-import "database/sql"
+import (
+	"database/sql"
+	_ "github.com/go-sql-driver/mysql"
+)
 
 var (
 	dbConn *sql.DB
