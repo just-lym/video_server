@@ -11,10 +11,10 @@ import (
 )
 
 func init() {
-	filePaths := "./logfile/info.log"
+	filePaths := "./logfile/info"
 	writer, _ := rotatelogs.New(
-		filePaths+".%Y%m%d%H%M",
-		rotatelogs.WithLinkName(filePaths),
+		filePaths+"-%Y%m%d%H.log",
+		rotatelogs.WithLinkName(filePaths+".log"),
 		rotatelogs.WithMaxAge(time.Duration(604800)*time.Second),
 		rotatelogs.WithRotationTime(time.Duration(86400)*time.Second),
 	)
