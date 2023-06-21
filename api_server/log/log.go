@@ -11,7 +11,7 @@ import (
 )
 
 func init() {
-	filePaths := "./log/info.log"
+	filePaths := "./logfile/info.log"
 	writer, _ := rotatelogs.New(
 		filePaths+".%Y%m%d%H%M",
 		rotatelogs.WithLinkName(filePaths),
