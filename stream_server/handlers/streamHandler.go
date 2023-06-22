@@ -49,7 +49,10 @@ func UploadHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params)
 	videoName := ps.ByName("vid-id")
 	err = os.WriteFile(VideoDir+videoName, data, 0666)
 	if err != nil {
+		customlog.Errorln("write file error%s", err.Error())
 		SendErrorResponse(w, http.StatusInternalServerError, "Internal Server Error")
 		return
 	}
+	w.WriteHeader(http.StatusOK)
+	io.WriteString(w, "Uploaded Successfully")
 }
